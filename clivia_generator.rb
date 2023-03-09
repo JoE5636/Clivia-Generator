@@ -1,16 +1,36 @@
 # do not forget to require your gem dependencies
-# do not forget to require_relative your local dependencies
-
+require "pry"
+require_relative "presenter"
+require_relative "requester"
 class CliviaGenerator
   # maybe we need to include a couple of modules?
+  include Presenter
+  include Requester
 
   def initialize
     # we need to initialize a couple of properties here
+    @user = nil
+    @score = []
   end
 
   def start
-    # welcome message
-    # prompt the user for an action
+    loop do
+      print_welcome
+      input = select_main_menu_action
+      case input
+      when "random"
+        puts "se generan las preguntas"
+      when "scores"
+        puts "pinta los scores"
+      when "exit"
+        puts "Thanks for playing CLIvia generator"
+        break
+      end
+    end
+    
+    
+    #{}binding.pry
+   
     # keep going until the user types exit
   end
 
