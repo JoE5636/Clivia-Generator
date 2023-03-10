@@ -7,7 +7,8 @@ module Presenter
   end
 
   def print_score(score)
-    # print the score message
+    puts "Well done! Your score is #{score}"
+    puts "--------------------------------------------------"
   end
   
 end
