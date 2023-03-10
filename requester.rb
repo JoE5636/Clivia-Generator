@@ -20,16 +20,16 @@ module Requester
   end
 
   def will_save?(score)
-    # show user's score
     print_score(score)
-    # ask the user to save the score
     puts "Do you want to save your score? (y/n)"
     print "> "
-    input = gets.chomp
-    # prompt the user to give the score a name if there is no name given, set it as Anonymous
-    puts "Type the name to assign to the score"
-    puts "> "
-
+    input = gets.chomp.downcase
+    if input == "y"
+      puts "Type the name to assign to the score"
+      print "> "
+      name = gets.chomp
+      @name = name.empty? ? "Anonymus" : name
+    end
   end
 
   def gets_option(prompt:, options:, required: nil)
