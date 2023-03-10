@@ -5,18 +5,28 @@ module Requester
   end
 
   def ask_question(question)
-    # show category and difficulty from question
-    answers = []
-    question.each { |key, _value|  answers << (key[:incorrect_answers]) && answers << (key[:correct_answer]) }
-    # p answers
-    question.each { |key, _value| puts "Category: #{key[:category]} | Difficulty: #{key[:difficulty]}\nQuestion: #{key[:question]}\n1.#{answers[0][rand(0..2)]}\n2.#{answers[0][rand(0..2)]}\n3.#{answers[1]}\n1.#{answers[0][rand(0..2)]}" }
-        
+    input = ""
+    question.each do |item|
+     puts "Category: #{item[:category]} | Difficulty: #{item[:difficulty]}"
+      puts "Question: #{item[:question]}"
+      #{}puts
+      if item[:type] === "multiple"
+        puts "1. option"
+        puts "2. option"
+        puts "3. option"
+        puts "4. option"
+        print "> "
+        input = gets.chomp.to_i
+      elsif item[:type] === "boolean"
+        puts "1. option"
+        puts "2. option"
+        print "> "
+        input = gets.chomp
+      end
+      input
+    end
     
-    #{}binding.pry
-    
-    
-    # show each one of the options
-    # grab user input
+
   end
 
   def will_save?(score)
@@ -29,6 +39,7 @@ module Requester
       print "> "
       name = gets.chomp
       @name = name.empty? ? "Anonymus" : name
+    elsif input == "n"
     end
   end
 

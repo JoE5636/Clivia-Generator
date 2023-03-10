@@ -12,29 +12,31 @@ class CliviaGenerator
   include HTTParty
 
   base_uri("https://opentdb.com/") 
-
+  
+  @@question = ""
+  
   def initialize
-    @user = nil
-    @question = ""
+    @name = nil
     @score = 0
   end
 
   def start
-   print_welcome
+   
    input = ""
 
     until input == "exit"
-     input = select_main_menu_action
+      print_welcome
+      input = select_main_menu_action
       
       case input
       when "random"
-        @question = random_trivia
+        @@question = random_trivia
         ask_questions
         
       when "scores"
         print_scores
       when "exit" 
-        puts "Thanks for playing CLIvia generator"
+        puts "Thank you for playing CLIvia generator!!!"
       end
 
     end
@@ -47,7 +49,7 @@ class CliviaGenerator
 
   def ask_questions
     # ask each question
-    ask_question(@question)
+    ask_question(@@question)
     
     # if response is correct, put a correct message and increase score
     # if response is incorrect, put an incorrect message, and which was the correct answer
@@ -67,7 +69,8 @@ class CliviaGenerator
   def load_questions
     response = self.class.get("/api.php?amount=10")
     parsed_response = JSON.parse(response.body, symbolize_names: true)
-    parsed_response[:results]
+    questions = parsed_response[:results]
+    questions
   end
 
   def parse_questions(text)
