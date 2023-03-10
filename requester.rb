@@ -6,7 +6,16 @@ module Requester
 
   def ask_question(question)
     # show category and difficulty from question
-    # show the question
+  
+    answers = []
+    question.each { |key, _value|  answers << (key[:incorrect_answers]) && answers << (key[:correct_answer]) }
+    question.each { |key, _value| puts "Category: #{key[:category]} | Difficulty: #{key[:difficulty]}\nQuestion: #{key[:question]}\n1.#{answers[0][rand(0..2)]}" }
+      
+      
+    
+    #{}binding.pry
+    
+    
     # show each one of the options
     # grab user input
   end
@@ -31,4 +40,5 @@ module Requester
     end
     input
   end
+
 end

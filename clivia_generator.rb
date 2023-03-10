@@ -6,6 +6,7 @@ require "json"
 require_relative "presenter"
 require_relative "requester"
 class CliviaGenerator
+  attr_reader :question
   # maybe we need to include a couple of modules?
   include Presenter
   include Requester
@@ -18,6 +19,7 @@ class CliviaGenerator
   def initialize
     # we need to initialize a couple of properties here
     @user = nil
+    @question = ""
     @score = []
   end
 
@@ -30,8 +32,11 @@ class CliviaGenerator
       
       case input
       when "random"
-        random_trivia
+        @question = load_questions
+
         ask_questions
+        
+        
       when "scores"
         puts "pinta los scores"
       when "exit" 
@@ -43,17 +48,14 @@ class CliviaGenerator
   end
 
   def random_trivia
-    question = ""
-    response = self.class.get("/api.php?amount=10")
-    parsed_response = JSON.parse(response.body, symbolize_names: true)
-    questions = parsed_response[:results]
-    puts questions
-    #{}question = questions.
+    # load the questions from the api
+    # questions are loaded, then let's ask them
   end
 
   def ask_questions
     # ask each question
-    #{}ask_question(question)
+    ask_question(@question)
+    
     # if response is correct, put a correct message and increase score
     # if response is incorrect, put an incorrect message, and which was the correct answer
     # once the questions end, show user's score and promp to save it
@@ -68,12 +70,17 @@ class CliviaGenerator
   end
 
   def load_questions
-    # ask the api for a random set of questions
-    # then parse the questions
+    response = self.class.get("/api.php?amount=10")
+    parsed_response = JSON.parse(response.body, symbolize_names: true)
+    @question = parsed_response[:results]
+    p @question
+    
+    
   end
 
-  def parse_questions
-    # questions came with an unexpected structure, clean them to make it usable for our purposes
+  def parse_questions(text)
+    coder =  HTMLEntities.new
+    parsed_text = coder.decode(text)
   end
 
   def print_scores
