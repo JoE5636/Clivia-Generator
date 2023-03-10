@@ -6,12 +6,11 @@ module Requester
 
   def ask_question(question)
     # show category and difficulty from question
-  
     answers = []
     question.each { |key, _value|  answers << (key[:incorrect_answers]) && answers << (key[:correct_answer]) }
-    question.each { |key, _value| puts "Category: #{key[:category]} | Difficulty: #{key[:difficulty]}\nQuestion: #{key[:question]}\n1.#{answers[0][rand(0..2)]}" }
-      
-      
+    # p answers
+    question.each { |key, _value| puts "Category: #{key[:category]} | Difficulty: #{key[:difficulty]}\nQuestion: #{key[:question]}\n1.#{answers[0][rand(0..2)]}\n2.#{answers[0][rand(0..2)]}\n3.#{answers[1]}\n1.#{answers[0][rand(0..2)]}" }
+        
     
     #{}binding.pry
     
@@ -22,9 +21,15 @@ module Requester
 
   def will_save?(score)
     # show user's score
+    print_score(score)
     # ask the user to save the score
-    # grab user input
+    puts "Do you want to save your score? (y/n)"
+    print "> "
+    input = gets.chomp
     # prompt the user to give the score a name if there is no name given, set it as Anonymous
+    puts "Type the name to assign to the score"
+    puts "> "
+
   end
 
   def gets_option(prompt:, options:, required: nil)

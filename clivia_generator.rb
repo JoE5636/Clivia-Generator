@@ -1,26 +1,22 @@
-# do not forget to require your gem dependencies
 require "pry"
 require "httparty"
 require "htmlentities"
 require "json"
 require_relative "presenter"
 require_relative "requester"
+
 class CliviaGenerator
   attr_reader :question
-  # maybe we need to include a couple of modules?
   include Presenter
   include Requester
   include HTTParty
-  #{}include Encoding
-  
-  
+
   base_uri("https://opentdb.com/") 
 
   def initialize
-    # we need to initialize a couple of properties here
     @user = nil
     @question = ""
-    @score = []
+    @score = 0
   end
 
   def start
@@ -32,13 +28,11 @@ class CliviaGenerator
       
       case input
       when "random"
-        @question = load_questions
-
+        @question = random_trivia
         ask_questions
         
-        
       when "scores"
-        puts "pinta los scores"
+        print_scores
       when "exit" 
         puts "Thanks for playing CLIvia generator"
       end
@@ -48,8 +42,7 @@ class CliviaGenerator
   end
 
   def random_trivia
-    # load the questions from the api
-    # questions are loaded, then let's ask them
+    load_questions
   end
 
   def ask_questions
@@ -59,6 +52,8 @@ class CliviaGenerator
     # if response is correct, put a correct message and increase score
     # if response is incorrect, put an incorrect message, and which was the correct answer
     # once the questions end, show user's score and promp to save it
+    will_save?(@score)
+
   end
 
   def save(data)
@@ -72,10 +67,7 @@ class CliviaGenerator
   def load_questions
     response = self.class.get("/api.php?amount=10")
     parsed_response = JSON.parse(response.body, symbolize_names: true)
-    @question = parsed_response[:results]
-    p @question
-    
-    
+    parsed_response[:results]
   end
 
   def parse_questions(text)
@@ -84,6 +76,15 @@ class CliviaGenerator
   end
 
   def print_scores
-    # print the scores sorted from top to bottom
+    puts "+-----------+-------+"
+    puts "|    Top Scores     |"
+    puts "+-----------+-------+"
+    puts "| Name      | Score |"
+    puts "+-----------+-------+"
+    puts "| Deyvi     | 40    |"
+    puts "| Diego     | 40    |"
+    puts "| Wences    | 30    |"
+    puts "| Anonymous | 20    |"
+    puts "+-----------+-------+"
   end
 end
