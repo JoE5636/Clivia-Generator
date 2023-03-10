@@ -61,7 +61,7 @@ class CliviaGenerator
   end
 
   def parse_scores
-    # get the scores data from file
+   score = JSON.parse(score.json, symbolize_names: true)
   end
 
   def load_questions
