@@ -1,9 +1,7 @@
 module Requester
   def select_main_menu_action
-    
     options = [ "random", "scores", "exit" ]
-    gets_option(prompt: nil, options: options)
-    
+    gets_option(prompt: nil, options: options, required: true)
   end
 
   def ask_question(question)
@@ -20,7 +18,7 @@ module Requester
     # prompt the user to give the score a name if there is no name given, set it as Anonymous
   end
 
-  def gets_option(prompt:, options:)
+  def gets_option(prompt:, options:, required: nil)
     input = ""
     loop do
       puts options.join(" | ")
