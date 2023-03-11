@@ -1,4 +1,5 @@
 require_relative "presenter"
+require "json"
 require "htmlentities"
 
 module Requester
@@ -28,6 +29,7 @@ module Requester
         print "> "
         name = gets.chomp
         @name = name.empty? ? "Anonymus" : name
+        save(@name, score)
         break
       elsif input == "n"
         break
@@ -48,10 +50,6 @@ module Requester
     end
     input
   end
-end
-
-def save(data)
-  # write to file the scores data
 end
 
 private
@@ -90,4 +88,11 @@ def increase_score(input, shuffled_answers, correct)
     puts "Incorrect answer :("
     puts "The correct answer is #{correct}"
   end
+end
+
+def save(name, score)
+  scores = JSON.parse(File.read("score.json"))
+  data = { name: name, score: score } 
+  scores << data
+  File.write("score.json", JSON.generate(scores))
 end

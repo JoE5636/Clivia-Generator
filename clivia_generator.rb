@@ -35,6 +35,7 @@ class CliviaGenerator
         print_scores
       when "exit"
         puts "Thank you for playing CLIvia generator!!!"
+        puts "Created with love by JoE"
       end
 
     end
