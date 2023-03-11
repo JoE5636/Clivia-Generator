@@ -1,4 +1,5 @@
 require_relative "presenter"
+require "htmlentities"
 
 module Requester
   def select_main_menu_action
@@ -8,9 +9,11 @@ module Requester
 
   def ask_question(question)
     input = ""
+    parsed_text = ""
     question.each do |item|
       puts "Category: #{item[:category]} | Difficulty: #{item[:difficulty]}"
-      puts "Question: #{item[:question]}"
+      parse_questions(item[:question])
+      # puts "Question: #{parsed_text}"
       print_answers(item)
     end
     input
@@ -72,6 +75,11 @@ def print_answers(item)
  input
 end
 
+def parse_questions(text)
+  coder = HTMLEntities.new
+  parsed_text = coder.decode(text)
+  puts "Question: #{parsed_text}"
+end
 
 
 def increase_score(input, shuffled_answers, correct, incorrect)

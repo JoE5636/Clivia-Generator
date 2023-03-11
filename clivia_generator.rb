@@ -1,6 +1,5 @@
 require "pry"
 require "httparty"
-require "htmlentities"
 require "json"
 require_relative "presenter"
 require_relative "requester"
@@ -30,7 +29,7 @@ class CliviaGenerator
 
       case input
       when "random"
-        @@question = random_trivia
+        @@question = load_questions
         ask_questions
 
       when "scores"
@@ -42,17 +41,11 @@ class CliviaGenerator
     end
   end
 
-  def random_trivia
-    load_questions
-  end
+
 
   def ask_questions
     input = ""
     ask_question(@@question)
-    
-
-    # if response is correct, put a correct message and increase score
-    # if response is incorrect, put an incorrect message, and which was the correct answer
     will_save?(@score)
   end
 
@@ -70,11 +63,7 @@ class CliviaGenerator
     parsed_response[:results]
   end
 
-  def parse_questions(text)
-    coder = HTMLEntities.new
-    parsed_text = coder.decode(text)
-  end
-
+  
   def print_scores
     puts "+-----------+-------+"
     puts "|    Top Scores     |"
