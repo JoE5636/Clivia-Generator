@@ -1,3 +1,5 @@
+require_relative "presenter"
+
 module Requester
   def select_main_menu_action
     options = ["random", "scores", "exit"]
@@ -9,39 +11,23 @@ module Requester
     question.each do |item|
       puts "Category: #{item[:category]} | Difficulty: #{item[:difficulty]}"
       puts "Question: #{item[:question]}"
-      if item[:type] == "multiple"
-        incorrect = item[:incorrect_answers]
-        correct = item[:correct_answer]
-        answers = incorrect << correct
-        shuffled_answers = answers.shuffle
-        puts "1. #{shuffled_answers[0]}\n2. #{shuffled_answers[1]}\n3. #{shuffled_answers[2]}\n4. #{shuffled_answers[3]}"
-        print "> "
-        input = gets.chomp.to_i
-      elsif item[:type] == "boolean"
-        incorrect = item[:incorrect_answers]
-        correct = item[:correct_answer]
-        answers = incorrect << correct
-        shuffled_answers = answers.shuffle
-        puts "1. #{shuffled_answers[0]}"
-        puts "2. #{shuffled_answers[1]}"
-        print "> "
-        input = gets.chomp
-      end
-      input
+      print_answers(item)
     end
+    input
   end
 
   def will_save?(score)
     print_score(score)
-    puts "Do you want to save your score? (y/n)"
-    print "> "
-    input = gets.chomp.downcase
-    return unless input == "y"
-
-    puts "Type the name to assign to the score"
-    print "> "
-    name = gets.chomp
-    @name = name.empty? ? "Anonymus" : name
+    loop do
+      puts "Do you want to save your score? (y/n)"
+      print "> "
+      input = gets.chomp.downcase
+      return unless input == "y"
+      puts "Type the name to assign to the score"
+      print "> "
+      name = gets.chomp
+      @name = name.empty? ? "Anonymus" : name
+    end
   end
 
   def gets_option(prompt:, options:, required: nil)
@@ -58,3 +44,45 @@ module Requester
     input
   end
 end
+
+
+
+
+def print_answers(item)
+  input = ""
+  if item[:type] == "multiple"
+    incorrect = item[:incorrect_answers]
+    correct = item[:correct_answer]
+    answers = incorrect << correct
+    shuffled_answers = answers.shuffle
+    printed_answers = shuffled_answers.each_index { |index| puts "#{index +1 }. #{shuffled_answers[index]}" }
+    print "> "
+    input = gets.chomp.to_i
+    increase_score(input, shuffled_answers, correct, incorrect)
+  elsif item[:type] == "boolean"
+    incorrect = item[:incorrect_answers]
+    correct = item[:correct_answer]
+    answers = incorrect << correct
+    shuffled_answers = answers.shuffle
+    printed_answers = shuffled_answers.each_index { |index| puts "#{index + 1}. #{shuffled_answers[index]}" }
+    print "> "
+    input = gets.chomp.to_i
+    increase_score(input, shuffled_answers, correct, incorrect)
+  end
+ input
+end
+
+
+
+def increase_score(input, shuffled_answers, correct, incorrect)
+  if input - 1 == shuffled_answers.index(correct)
+    puts "Correct answer!!"
+    @score += 10
+  else
+    puts "Incorrect answer :("
+    puts "The correct answer is #{correct}"
+  end
+  
+end
+
+

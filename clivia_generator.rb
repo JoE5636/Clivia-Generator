@@ -6,7 +6,7 @@ require_relative "presenter"
 require_relative "requester"
 
 class CliviaGenerator
-  attr_reader :question
+  attr_accessor :question, :name, :score
 
   include Presenter
   include Requester
@@ -47,12 +47,12 @@ class CliviaGenerator
   end
 
   def ask_questions
-    # ask each question
+    input = ""
     ask_question(@@question)
+    
 
     # if response is correct, put a correct message and increase score
     # if response is incorrect, put an incorrect message, and which was the correct answer
-    # once the questions end, show user's score and promp to save it
     will_save?(@score)
   end
 
