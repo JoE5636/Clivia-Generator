@@ -1,32 +1,34 @@
 module Requester
   def select_main_menu_action
-    options = [ "random", "scores", "exit" ]
+    options = ["random", "scores", "exit"]
     gets_option(prompt: nil, options: options, required: true)
   end
 
   def ask_question(question)
     input = ""
     question.each do |item|
-     puts "Category: #{item[:category]} | Difficulty: #{item[:difficulty]}"
+      puts "Category: #{item[:category]} | Difficulty: #{item[:difficulty]}"
       puts "Question: #{item[:question]}"
-      #{}puts
-      if item[:type] === "multiple"
-        puts "1. option"
-        puts "2. option"
-        puts "3. option"
-        puts "4. option"
+      if item[:type] == "multiple"
+        incorrect = item[:incorrect_answers]
+        correct = item[:correct_answer]
+        answers = incorrect << correct
+        shuffled_answers = answers.shuffle
+        puts "1. #{shuffled_answers[0]}\n2. #{shuffled_answers[1]}\n3. #{shuffled_answers[2]}\n4. #{shuffled_answers[3]}"
         print "> "
         input = gets.chomp.to_i
-      elsif item[:type] === "boolean"
-        puts "1. option"
-        puts "2. option"
+      elsif item[:type] == "boolean"
+        incorrect = item[:incorrect_answers]
+        correct = item[:correct_answer]
+        answers = incorrect << correct
+        shuffled_answers = answers.shuffle
+        puts "1. #{shuffled_answers[0]}"
+        puts "2. #{shuffled_answers[1]}"
         print "> "
         input = gets.chomp
       end
       input
     end
-    
-
   end
 
   def will_save?(score)
@@ -34,13 +36,12 @@ module Requester
     puts "Do you want to save your score? (y/n)"
     print "> "
     input = gets.chomp.downcase
-    if input == "y"
-      puts "Type the name to assign to the score"
-      print "> "
-      name = gets.chomp
-      @name = name.empty? ? "Anonymus" : name
-    elsif input == "n"
-    end
+    return unless input == "y"
+
+    puts "Type the name to assign to the score"
+    print "> "
+    name = gets.chomp
+    @name = name.empty? ? "Anonymus" : name
   end
 
   def gets_option(prompt:, options:, required: nil)
@@ -56,5 +57,4 @@ module Requester
     end
     input
   end
-
 end
