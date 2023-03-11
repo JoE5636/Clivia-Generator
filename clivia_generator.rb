@@ -13,10 +13,9 @@ class CliviaGenerator
 
   base_uri("https://opentdb.com/")
 
-  @@question = ""
-
   def initialize
     @name = nil
+    @question = []
     @score = 0
   end
 
@@ -29,7 +28,7 @@ class CliviaGenerator
 
       case input
       when "random"
-        @@question = load_questions
+        @question = load_questions
         ask_questions
 
       when "scores"
@@ -41,20 +40,13 @@ class CliviaGenerator
     end
   end
 
-
-
   def ask_questions
-    input = ""
-    ask_question(@@question)
+    ask_question(@question)
     will_save?(@score)
   end
 
-  def save(data)
-    # write to file the scores data
-  end
-
   def parse_scores
-    score = JSON.parse(score.json, symbolize_names: true)
+    parsed_scores = JSON.parse(score.json, symbolize_names: true)
   end
 
   def load_questions
@@ -63,7 +55,6 @@ class CliviaGenerator
     parsed_response[:results]
   end
 
-  
   def print_scores
     puts "+-----------+-------+"
     puts "|    Top Scores     |"
