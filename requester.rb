@@ -1,22 +1,34 @@
 module Requester
   def select_main_menu_action
-    options = [ "random", "scores", "exit" ]
+    options = ["random", "scores", "exit"]
     gets_option(prompt: nil, options: options, required: true)
   end
 
   def ask_question(question)
-    # show category and difficulty from question
-    answers = []
-    question.each { |key, _value|  answers << (key[:incorrect_answers]) && answers << (key[:correct_answer]) }
-    # p answers
-    question.each { |key, _value| puts "Category: #{key[:category]} | Difficulty: #{key[:difficulty]}\nQuestion: #{key[:question]}\n1.#{answers[0][rand(0..2)]}\n2.#{answers[0][rand(0..2)]}\n3.#{answers[1]}\n1.#{answers[0][rand(0..2)]}" }
-        
-    
-    #{}binding.pry
-    
-    
-    # show each one of the options
-    # grab user input
+    input = ""
+    question.each do |item|
+      puts "Category: #{item[:category]} | Difficulty: #{item[:difficulty]}"
+      puts "Question: #{item[:question]}"
+      if item[:type] == "multiple"
+        incorrect = item[:incorrect_answers]
+        correct = item[:correct_answer]
+        answers = incorrect << correct
+        shuffled_answers = answers.shuffle
+        puts "1. #{shuffled_answers[0]}\n2. #{shuffled_answers[1]}\n3. #{shuffled_answers[2]}\n4. #{shuffled_answers[3]}"
+        print "> "
+        input = gets.chomp.to_i
+      elsif item[:type] == "boolean"
+        incorrect = item[:incorrect_answers]
+        correct = item[:correct_answer]
+        answers = incorrect << correct
+        shuffled_answers = answers.shuffle
+        puts "1. #{shuffled_answers[0]}"
+        puts "2. #{shuffled_answers[1]}"
+        print "> "
+        input = gets.chomp
+      end
+      input
+    end
   end
 
   def will_save?(score)
@@ -24,12 +36,12 @@ module Requester
     puts "Do you want to save your score? (y/n)"
     print "> "
     input = gets.chomp.downcase
-    if input == "y"
-      puts "Type the name to assign to the score"
-      print "> "
-      name = gets.chomp
-      @name = name.empty? ? "Anonymus" : name
-    end
+    return unless input == "y"
+
+    puts "Type the name to assign to the score"
+    print "> "
+    name = gets.chomp
+    @name = name.empty? ? "Anonymus" : name
   end
 
   def gets_option(prompt:, options:, required: nil)
@@ -45,5 +57,4 @@ module Requester
     end
     input
   end
-
 end
