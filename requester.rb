@@ -95,4 +95,4 @@ def save(name, score)
   data = { name: name, score: score } 
   scores << data
   File.write("score.json", JSON.generate(scores))
-end
+end 

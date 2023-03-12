@@ -1,6 +1,7 @@
 require "pry"
 require "httparty"
 require "json"
+require "terminal-table"
 require_relative "presenter"
 require_relative "requester"
 
@@ -32,7 +33,7 @@ class CliviaGenerator
         ask_questions
 
       when "scores"
-        print_scores
+        puts print_scores
       when "exit"
         puts "Thank you for playing CLIvia generator!!!"
         puts "Created with love by JoE"
@@ -47,7 +48,8 @@ class CliviaGenerator
   end
 
   def parse_scores
-    parsed_scores = JSON.parse(score.json, symbolize_names: true)
+    parsed_scores = JSON.parse(File.read("score.json"), symbolize_names: true)
+    parsed_scores
   end
 
   def load_questions
@@ -57,15 +59,15 @@ class CliviaGenerator
   end
 
   def print_scores
-    puts "+-----------+-------+"
-    puts "|    Top Scores     |"
-    puts "+-----------+-------+"
-    puts "| Name      | Score |"
-    puts "+-----------+-------+"
-    puts "| Deyvi     | 40    |"
-    puts "| Diego     | 40    |"
-    puts "| Wences    | 30    |"
-    puts "| Anonymous | 20    |"
-    puts "+-----------+-------+"
+    scores = parse_scores
+    table = Terminal::Table.new
+    table.title = "Top Scores"
+    table.headings = ["Name", "score"]
+    table.rows = scores.map do |score|
+      [score[:name], score[:score] || ""]
+    end
+
+    table
   end
 end
+
