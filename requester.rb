@@ -93,7 +93,7 @@ end
 
 def save(name, score, filename)
   begin
-  scores = JSON.parse(File.read("filename"))
+  scores = JSON.parse(File.read(filename))
   rescue Errno::ENOENT
   end
   data = { name: name, score: score }
